@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 20px;
+}
+
+
+
+/*
+=============================================================================
+                            SECTION FORECAST
+=============================================================================
+*/
+
+.forecast {
+    text-align: center;
+}
+
+.show-fc {
+    display:inline-block;
+    border: none;
+    background-color: #4c6ef5;
+    color: #fff;
+    padding: 1rem 4rem;
+    border-radius: 20px;
+    margin: 1rem 0;
+    font-size: 3rem;
+}
+
+.show-fc:hover {
+    background-color: #3b5bdb;
+    cursor: pointer;
+}
+
+.container-fc {
+    color: #fff;
+    background-color: #4c6ef5;
+    margin: 10rem 2rem;
+    padding: 5rem 2rem;
+    border-radius: 20px;
+}
+
+.container-fc h4 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 5rem;
+}
+
+.grid-fc {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+}
+
+.flex-fc {
+    display: flex;
+    flex-direction: column;
+    row-gap: 6rem;
+    align-items: center;
+}
+
+.flex-fc span:nth-of-type(1) {
+    
+}
+
+.flex-fc span:nth-of-type(2) {
+    font-size: 4rem;
+}
+
+.hidden {
+    display: none;
+}

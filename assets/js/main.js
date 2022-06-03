@@ -15,7 +15,6 @@ let tempMin = document.querySelector('#tempMin_output');
 let tempMax = document.querySelector('#tempMax_output');
 
 
-
 const calToCel = (temp) => {
     return Math.round(temp - 273.15);
 }
@@ -109,7 +108,7 @@ const fetchForecast = (lon, lat) => {
                 const temps = [];
 
                 outer.forEach(inner => {
-                    headlineFC.textContent = moment(inner.dt_txt).format('MMM Do YY');
+                    headlineFC.textContent = moment(inner.dt_txt).format('MMMM Do');
                     weatherFC.textContent = inner.weather[0].main;
                     descFC.textContent = inner.weather[0].description;
                     temps.push(inner.main.temp);
@@ -155,6 +154,18 @@ const fetchGeo = (city, limit) => {
             })
         })
 }
+
+
+// API World Map
+
+const mapLayer = 'temp_new';
+const mapZ = 0;
+const mapX = 0;
+const mapY = 0;
+
+fetch(`https://tile.openweathermap.org/map/${mapLayer}/${mapZ}/${mapX}/${mapY}.png?appid=${key}`).then(response => console.log(response));
+
+// EVENT Listener
 
 btn.addEventListener('click', x => {
     let city = inputCity.value;

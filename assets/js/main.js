@@ -3,6 +3,7 @@
 // HTML ELEMENTS
 const key = '6b2723a1c78fa552dac0f78569b46380';
 const btn = document.querySelector('#btn');
+const inputCity = document.querySelector('#city');
 
 
 const calToCel = (temp) => {
@@ -45,25 +46,7 @@ const fetchGeo = (city,limit) => {
 }
 
 btn.addEventListener('click',x => {
-    let city = 'warsingsfehn';
+    let city = inputCity.value;
     let limit = 5;
     fetchGeo(city,limit);
 });
-
-
-// fetchGeo
-// .then(response => response.json())
-// .then(json => {
-//     console.log(json);
-//     lat = json[0].lat;
-//     lon = json[0].lon;
-//     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=6b2723a1c78fa552dac0f78569b46380`).then(response => response.json()).then(json => {
-//         console.log(json);
-//         console.log(json.weather[0].main);
-//         console.log(json.weather[0].description);
-//         console.log(calToCel(json.main.temp));
-//         console.log(calToCel(json.main.feels_like));
-//         console.log(calToCel(json.main.temp_min));
-//         console.log(calToCel(json.main.temp_max));
-//     });
-// })

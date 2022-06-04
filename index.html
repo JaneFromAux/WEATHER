@@ -11,24 +11,20 @@
 
 <body>
     <header>
-        <h1>Ihre Wettervorhersage</h1>
-        <h2>Hier wird nur über das Wetter geredet</h2>
-        <form action="">
-            <label for="">Das Wetter in Ihrer Stadt</label>
-            <input type="text" name="" id="city" placeholder="Bitte Stadt eingeben" required>
-            <input type="button" value="senden" id="btn">
+        <nav>
+            <a href="#" class="a-home"><h1>Ihre Wettervorhersage</h1></a>
+        </nav>
+        <article>
+            <h2>Hier wird nur über das Wetter geredet</h2>
+            <form action="">
+                <label for="">Das Wetter in Ihrer Stadt</label>
+                <input type="text" name="" id="city" placeholder="Bitte Stadt eingeben" required>
+                <input type="button" value="senden" id="btn">
+        </article>
         </form>
     </header>
     <main>
-        <!-- <section class="current-weather">
-            <h3 id="todaysWeather_output"></h3>
-            <p id="today_output"></p>
-            <p id="temp_output"></p>
-            <p id="feelsLike_output"></p>
-            <p id="tempMin_output"></p>
-            <p id="tempMax_output"></p>
-        </section> -->
-        <section class="current__weather">
+        <section class="current__weather hidden">
             <h3>Das aktuelle Wetter in <span class="current__weather__city"></span></h3>
             <img src="" alt="" class="current__weather__icon" id="">
                 <div class="current__weather__grid">
@@ -53,12 +49,10 @@
                         <span id="tempMax_output"></span>
                     </div>
                 </div>
+                <button class="show-fc hidden">Show More</button>
         </section>
         <section class="forecast">
-            <button class="show-fc hidden">Show More</button>
-            <div class="wrapper">
-
-            </div>
+            <div class="wrapper"></div>
         </section>
     </main>
     <script src="lib/moment/moment.min.js"></script>

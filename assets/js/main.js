@@ -4,10 +4,14 @@ moment.locale('de');
 
 // HTML ELEMENTS
 const key = '6b2723a1c78fa552dac0f78569b46380';
+const aHome = document.querySelector('.a-home');
+const header = document.querySelector('header');
+const main = document.querySelector('main');
 const btn = document.querySelector('#btn');
 const inputCity = document.querySelector('#city');
 const btnFC = document.querySelector('.show-fc');
 const sectionForecast = document.querySelector('.forecast');
+const sectionCurrent = document.querySelector('.current__weather');
 const currentIcon = document.querySelector('.current__weather__icon');
 const wrapper = document.querySelector('.wrapper');
 
@@ -19,9 +23,10 @@ let tempMin = document.querySelector('#tempMin_output');
 let tempMax = document.querySelector('#tempMax_output');
 
 // Template for Forecast
-const createHTML = (date,weather,tempAvg, tempMin, tempMax) => {
+const createHTML = (date,srcIconFC,weather,tempAvg, tempMin, tempMax) => {
     return `<div class="container-fc">
     <h4>${date}</h4>
+    <img src="${srcIconFC}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
             <span>Durchschnittliches Wetter</span>
@@ -46,7 +51,7 @@ const createHTML = (date,weather,tempAvg, tempMin, tempMax) => {
 const fetchWeather = (lon, lat) => {
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
     .then(response => response.json())
-    .then(json => {   console.log(json);
+    .then(json => { 
         let srcIcon = `http://openweathermap.org/img/wn/${json.weather[0].icon}@2x.png`;
         currentIcon.setAttribute('src',srcIcon);
 
@@ -55,14 +60,24 @@ const fetchWeather = (lon, lat) => {
         feelsLike.innerHTML = Math.round(json.main.feels_like) + " °C";
         tempMin.innerHTML = Math.round(json.main.temp_min) + " °C";
         tempMax.innerHTML = Math.round(json.main.temp_max) + " °C";
+        document.querySelector('.current__weather').scrollIntoView({behavior: 'smooth'});
     });
 }
 
 const fetchForecast = (lon, lat) => {
+    if(wrapper.childNodes.length !== 0) {
+        wrapper.innerHTML = '';
+        wrapper.classList.add.hidden;
+        btn.textContent = 'Show More';
+        return;
+    }
+    btn.textContent = 'Show Less';
+    wrapper.innerHTML = '';
 
     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
         .then(response => response.json())
         .then(json => {
+            console.log(json);
 
             // create variables for better readability and scoping
             let array = [[],[],[],[],[]];
@@ -89,12 +104,12 @@ const fetchForecast = (lon, lat) => {
                 const temps = [];
                 let headlineFC;
                 let weatherFC;
+                console.log(outer);
+                let srcIconFC = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
 
                 // getting temps per day
                 outer.forEach(inner => {
-                    let srcIcon = `http://openweathermap.org/img/wn/${inner.weather[0].icon}@2x.png`;
                     headlineFC = moment(inner.dt_txt).format('LL');
-                    // weatherFC.textContent = inner.weather[0].main;
                     weatherFC = inner.weather[0].description;
                     temps.push(inner.main.temp);
                 })
@@ -105,8 +120,9 @@ const fetchForecast = (lon, lat) => {
                 const tempAvg = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
 
                 // Create and insert HTML Template
-                const html = createHTML(headlineFC,weatherFC,tempAvg,tempMin,tempMax);
-                wrapper.insertAdjacentHTML('beforeend', html);
+                wrapper.innerHTML += createHTML(headlineFC,srcIconFC ,weatherFC,tempAvg,tempMin,tempMax)
+
+                document.body.querySelector('.container-fc').scrollIntoView({behavior: 'smooth'});
             })
         })
 }
@@ -116,14 +132,14 @@ const fetchGeo = (city, limit) => {
         .then(response => response.json())
         .then(json => {
             fetchWeather(json[0].lon, json[0].lat);
-            btnFC.classList.remove('hidden');
+            sectionCurrent.classList.remove('hidden');
             wrapper.innerHTML = '';
+            btnFC.classList.remove('hidden');
             btnFC.addEventListener('click', e => {
                 fetchForecast(json[0].lon, json[0].lat);
             })
         })
 }
-
 
 // API World Map
 // doesn't work. google api what u doin
@@ -142,3 +158,8 @@ btn.addEventListener('click', x => {
     let limit = 5;
     fetchGeo(city, limit);
 });
+
+aHome.addEventListener('click', e => {
+    e.preventDefault();
+    header.scrollIntoView({behavior: "smooth"});
+})

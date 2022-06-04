@@ -20,13 +20,39 @@
         </form>
     </header>
     <main>
-        <section class="current-weather">
+        <!-- <section class="current-weather">
             <h3 id="todaysWeather_output"></h3>
             <p id="today_output"></p>
             <p id="temp_output"></p>
             <p id="feelsLike_output"></p>
             <p id="tempMin_output"></p>
             <p id="tempMax_output"></p>
+        </section> -->
+        <section class="current__weather">
+            <h3>Das aktuelle Wetter in <span class="current__weather__city"></span></h3>
+            <img src="" alt="" class="current__weather__icon" id="">
+            <div class="current__weather__grid">
+                <div class="current__weather__flex">
+                    <span>Aktuelles Wetter</span>
+                    <span id="today_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <span>Temperatur</span>
+                    <span id="temp_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <span>Gefühlte Temperatur</span>
+                    <span id="feelsLike_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <span>Geringste Temperatur</span>
+                    <span id="tempMin_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <span>Höchste Temperatur</span>
+                    <span id="tempMax_output"></span>
+                </div>
+            </div>
         </section>
         <section class="forecast">
             <button class="show-fc hidden">Show More</button>

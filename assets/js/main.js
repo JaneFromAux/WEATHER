@@ -6,6 +6,7 @@ const btn = document.querySelector('#btn');
 const inputCity = document.querySelector('#city');
 const btnFC = document.querySelector('.show-fc');
 const sectionForecast = document.querySelector('.forecast');
+const currentIcon = document.querySelector('.current__weather__icon');
 
 let todaysWeather = document.querySelector('#todaysWeather_output');
 let today = document.querySelector('#today_output');
@@ -15,20 +16,23 @@ let tempMin = document.querySelector('#tempMin_output');
 let tempMax = document.querySelector('#tempMax_output');
 
 
-const calToCel = (temp) => {
-    return Math.round(temp - 273.15);
-}
+// const calToCel = (temp) => {
+//     return Math.round(temp - 273.15);
+// }
 
 const fetchWeather = (lon, lat) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`).then(response => response.json()).then(json => {
-        document.body.style.fontFamily = "Helvetica";
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`).then(response => response.json()).then(json => {   console.log(json);
+        let srcIcon = `http://openweathermap.org/img/wn/${json.weather[0].icon}@2x.png`;
+        currentIcon.setAttribute('src',srcIcon);
+        // document.body.style.fontFamily = "Helvetica";
 
-        todaysWeather.innerHTML = "Today's Weather ☀️"
-        today.innerHTML = "Today we have: " + json.weather[0].main;
-        temp.innerHTML = "Temperature: " + calToCel(json.main.temp) + " °C";
-        feelsLike.innerHTML = "Feels like: " + calToCel(json.main.feels_like) + " °C";
-        tempMin.innerHTML = "Min. temperature will be: " + calToCel(json.main.temp_min) + " °C";
-        tempMax.innerHTML = "Max. temperature will be: " + calToCel(json.main.temp_max) + " °C";
+        // todaysWeather.innerHTML = "Today's Weather ☀️"
+
+        today.innerHTML = json.weather[0].description;
+        temp.innerHTML = Math.round(json.main.temp) + " °C";
+        feelsLike.innerHTML = Math.round(json.main.feels_like) + " °C";
+        tempMin.innerHTML = Math.round(json.main.temp_min) + " °C";
+        tempMax.innerHTML = Math.round(json.main.temp_max) + " °C";
         // console.log(json.weather[0].description);
         // console.log(calToCel(json.main.temp));
         // console.log(calToCel(json.main.feels_like));
@@ -38,9 +42,10 @@ const fetchWeather = (lon, lat) => {
 }
 
 const fetchForecast = (lon, lat) => {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${key}`)
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
         .then(response => response.json())
         .then(json => {
+            console.log(json);
             let array = [[],[],[],[],[]];
             let muster = json.list[0].dt_txt.slice(0, json.list[0].dt_txt.indexOf(' '));
             let date = moment(muster);
@@ -51,29 +56,21 @@ const fetchForecast = (lon, lat) => {
             let day6 = date.clone().add(5,'days');
             json.list.forEach(el => {
                 let compare = moment(el.dt_txt);
-                if ( compare < day2) {
-                    array[0].push(el);
-                } else if (compare < day3) {
-                    array[1].push(el);
-                } else if (compare < day4) {
-                    array[2].push(el);
-                } else if (compare < day5) {
-                    array[3].push(el);
-                } else if (compare < day6){
-                    array[4].push(el);
-                } 
-                // else {
-                //     array[5].push(el);
-                // }
+                if ( compare < day2) array[0].push(el);
+                else if (compare < day3) array[1].push(el);
+                else if (compare < day4) array[2].push(el);
+                else if (compare < day5) array[3].push(el);
+                else if (compare < day6) array[4].push(el);
             })
             array.forEach((outer, index) => {
 
                 // Creating Elements
                 const containerFC = document.createElement('div');
+                const iconFC = document.createElement('img');
                 const headlineFC = document.createElement('h4');
                 const gridFC = document.createElement('div');
-                const flexWeatherFC = document.createElement('div');
-                const labelWeatherFC = document.createElement('span');
+                // const flexWeatherFC = document.createElement('div');
+                // const labelWeatherFC = document.createElement('span');
                 const weatherFC = document.createElement('span');
                 const flexDescFC = document.createElement('div');
                 const labelDescFC = document.createElement('span');
@@ -91,14 +88,14 @@ const fetchForecast = (lon, lat) => {
                 // Adding Classes
                 containerFC.classList.add('container-fc');
                 gridFC.classList.add('grid-fc');
-                flexWeatherFC.classList.add('flex-fc');
+                // flexWeatherFC.classList.add('flex-fc');
                 flexDescFC.classList.add('flex-fc');
                 flexAvgFC.classList.add('flex-fc');
                 flexMinFC.classList.add('flex-fc');
                 flexMaxFC.classList.add('flex-fc');
 
                 // TextContent Static Elements
-                labelWeatherFC.textContent = `Current Weather`;
+                // labelWeatherFC.textContent = `Current Weather`;
                 labelDescFC.textContent = `Detailed Weather`;
                 labelAvgFC.textContent = `Average Temperature`;
                 labelMinFC.textContent = `Min Temperature`;
@@ -108,27 +105,28 @@ const fetchForecast = (lon, lat) => {
                 const temps = [];
 
                 outer.forEach(inner => {
+                    let srcIcon = `http://openweathermap.org/img/wn/${inner.weather[0].icon}@2x.png`;
                     headlineFC.textContent = moment(inner.dt_txt).format('MMMM Do');
                     weatherFC.textContent = inner.weather[0].main;
                     descFC.textContent = inner.weather[0].description;
                     temps.push(inner.main.temp);
                 })
 
-                tempMinFC.textContent = `${calToCel(Math.min(...temps))} °C`;
-                tempMaxFC.textContent = `${calToCel(Math.max(...temps))} °C`;
-                tempAvgFC.textContent = `${calToCel(temps.reduce((a,b) => a + b) / temps.length)} °C`;
+                tempMinFC.textContent = `${Math.round(Math.min(...temps))} °C`;
+                tempMaxFC.textContent = `${Math.round(Math.max(...temps))} °C`;
+                tempAvgFC.textContent = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
 
                 // Zusammenbau Element
                 containerFC.insertAdjacentElement('afterbegin', headlineFC);
                 containerFC.insertAdjacentElement('beforeend', gridFC);
-                gridFC.insertAdjacentElement('beforeend',flexWeatherFC);
+                // gridFC.insertAdjacentElement('beforeend',flexWeatherFC);
                 gridFC.insertAdjacentElement('beforeend',flexDescFC);
                 gridFC.insertAdjacentElement('beforeend',flexAvgFC);
                 gridFC.insertAdjacentElement('beforeend',flexMinFC);
                 gridFC.insertAdjacentElement('beforeend',flexMaxFC);
 
-                flexWeatherFC.insertAdjacentElement('beforeend', labelWeatherFC);
-                flexWeatherFC.insertAdjacentElement('beforeend', weatherFC);
+                // flexWeatherFC.insertAdjacentElement('beforeend', labelWeatherFC);
+                // flexWeatherFC.insertAdjacentElement('beforeend', weatherFC);
                 flexDescFC.insertAdjacentElement('beforeend', labelDescFC);
                 flexDescFC.insertAdjacentElement('beforeend', descFC);
                 flexAvgFC.insertAdjacentElement('beforeend', labelAvgFC);

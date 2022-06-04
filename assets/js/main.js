@@ -120,7 +120,7 @@ const fetchForecast = (lon, lat) => {
                 const tempAvg = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
 
                 // Create and insert HTML Template
-                wrapper.innerHTML += createHTML(headlineFC,srcIconFC ,weatherFC,tempAvg,tempMin,tempMax)
+                wrapper.innerHTML += createHTML(headlineFC,srcIconFC ,weatherFC,tempAvg,tempMin,tempMax);
 
                 document.body.querySelector('.container-fc').scrollIntoView({behavior: 'smooth'});
             })

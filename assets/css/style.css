@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    /* font-size rausnehmen bevor man font sizes final anpasst */
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*
+=============================================================================
+                            Header
+=============================================================================
+*/
+
+header {
+    background: url(../img/ivana-cajina-dQejX2ucPBs-unsplash.jpeg) center / cover no-repeat;
+}
+
+header nav {
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+header nav a {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    padding: 1rem;
+}
+
+header article {
+    text-align: center;
+    padding: 30vh 0 50vh 0;
+}
+
+
+/*
+=============================================================================
+                            SECTION Current Weather
+=============================================================================
+*/
+
+.current__weather {
+    padding: 20vh 0 20vh 0;
+}
+
+.current__weather__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.current__weather__flex {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+=============================================================================
+                            SECTION FORECAST
+=============================================================================
+*/
+
+.forecast {
+    /* text-align: center; */
+}
+
+.show-fc {
+    display:inline-block;
+    border: none;
+    background-color: #4c6ef5;
+    color: #fff;
+    padding: 1rem 4rem;
+    border-radius: 20px;
+    margin: 1rem 0;
+    font-size: 3rem;
+}
+
+.show-fc:hover {
+    background-color: #3b5bdb;
+    cursor: pointer;
+}
+
+.container-fc {
+    color: #fff;
+    background-color: #4c6ef5;
+    margin: 10rem 2rem;
+    padding: 5rem 2rem;
+    border-radius: 20px;
+}
+
+.container-fc h4 {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.container-fc img {
+    margin-left: 5rem;
+}
+
+.grid-fc {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+.flex-fc {
+    display: flex;
+    flex-direction: column;
+    row-gap: 6rem;
+    align-items: center;
+}
+
+.flex-fc span:nth-of-type(1) {
+    
+}
+
+.flex-fc span:nth-of-type(2) {
+    font-size: 4rem;
+}
+
+
+/*
+=============================================================================
+                            Hilfsklassen
+=============================================================================
+*/
+
+.hidden {
+    display: none;
+}

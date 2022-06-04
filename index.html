@@ -11,20 +11,51 @@
 
 <body>
     <header>
-        <h1>Ihre Wettervorhersage</h1>
-        <h2>Hier wird nur über das Wetter geredet</h2>
-        <form action="">
-            <label for="">Das Wetter in Ihrer Stadt</label>
-            <input type="text" name="" id="city" placeholder="Bitte Stadt eingeben" required>
-            <input type="button" value="senden" id="btn">
+        <nav>
+            <a href="#" class="a-home"><h1>Ihre Wettervorhersage</h1></a>
+        </nav>
+        <article>
+            <h2>Hier wird nur über das Wetter geredet</h2>
+            <form action="">
+                <label for="">Das Wetter in Ihrer Stadt</label>
+                <input type="text" name="" id="city" placeholder="Bitte Stadt eingeben" required>
+                <input type="button" value="senden" id="btn">
+        </article>
         </form>
-        <h3 id="todaysWeather_output"></h3>
-        <p id="today_output"></p>
-        <p id="temp_output"></p>
-        <p id="feelsLike_output"></p>
-        <p id="tempMin_output"></p>
-        <p id="tempMax_output"></p>
     </header>
+    <main>
+        <section class="current__weather hidden">
+            <h3>Das aktuelle Wetter in <span class="current__weather__city"></span></h3>
+            <img src="" alt="" class="current__weather__icon" id="">
+                <div class="current__weather__grid">
+                    <div class="current__weather__flex">
+                        <span>Aktuelles Wetter</span>
+                        <span id="today_output"></span>
+                    </div>
+                    <div class="current__weather__flex">
+                        <span>Temperatur</span>
+                        <span id="temp_output"></span>
+                    </div>
+                    <div class="current__weather__flex">
+                        <span>Gefühlte Temperatur</span>
+                        <span id="feelsLike_output"></span>
+                    </div>
+                    <div class="current__weather__flex">
+                        <span>Geringste Temperatur</span>
+                        <span id="tempMin_output"></span>
+                    </div>
+                    <div class="current__weather__flex">
+                        <span>Höchste Temperatur</span>
+                        <span id="tempMax_output"></span>
+                    </div>
+                </div>
+                <button class="show-fc hidden">Show More</button>
+        </section>
+        <section class="forecast">
+            <div class="wrapper"></div>
+        </section>
+    </main>
+    <script src="lib/moment/moment.min.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 

@@ -23,6 +23,12 @@ let feelsLike = document.querySelector('#feelsLike_output');
 let tempMin = document.querySelector('#tempMin_output');
 let tempMax = document.querySelector('#tempMax_output');
 
+// Template Wrapper
+
+const resetWrapper = `<button class="slider__button slider__button--left">&larr;</button>
+<button class="slider__button slider__button--right">&rarr;</button>
+<div class="dots"></div>`;
+
 // Template for Forecast
 const createHTML = (obj) => {
     return `<div class="container-fc">
@@ -49,6 +55,69 @@ const createHTML = (obj) => {
 </div>`
 }
 
+const slider = () => {
+    const slides = document.querySelectorAll('.container-fc');
+    const btnRight = document.querySelector('.slider__button--right');
+    const btnLeft = document.querySelector('.slider__button--left');
+    const dotContainer = document.querySelector('.dots');
+
+    let curSlide = 0;
+    const maxSlides = slides.length;
+
+    const createDots = () => {
+        slides.forEach((_,i) => {
+            dotContainer.insertAdjacentHTML('beforeend', 
+            `<button class='dots__dot' data-slide='${i}'></button>`)
+        })
+    }
+
+    const activateDot = (slide) => {
+        document.querySelectorAll('.dots__dot').forEach(dot => {
+            dot.classList.remove('dots__dot--active')
+        });
+        document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
+    }
+
+    const goToSlide = slide => {
+        slides.forEach((s,index) => s.style.transform = `translateX(${(index - slide) * 100}%)`);
+    }
+
+    const nextSlide = () => {
+        curSlide++;
+        if(curSlide === maxSlides) curSlide = 0;
+        goToSlide(curSlide);
+        activateDot(curSlide);
+    }
+    
+    const prevSlide = () => {
+        curSlide--;
+        if(curSlide === -1) curSlide = maxSlides - 1;
+        goToSlide(curSlide);
+        activateDot(curSlide);
+    }
+
+    const init = () => {
+        goToSlide(curSlide);
+        createDots();
+        activateDot(curSlide);
+    }
+
+    init();
+    
+    btnRight.addEventListener('click',nextSlide);
+    btnLeft.addEventListener('click', prevSlide);
+
+    dotContainer.addEventListener('click', e => {
+        if(e.target.classList.contains('dots__dot')) {
+            const slide = e.target.dataset.slide;
+            goToSlide(slide);
+            activateDot(slide);
+        }
+    })
+
+}
+
+
 const fetchWeather = (lon, lat) => {
     sectionCurrent.classList.remove('hidden');
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
@@ -67,15 +136,7 @@ const fetchWeather = (lon, lat) => {
 }
 
 const fetchForecast = (lon, lat) => {
-    if(wrapper.childNodes.length !== 0) {
-        wrapper.innerHTML = '';
-        wrapper.classList.add.hidden;
-        btnFC.textContent = 'Show More';
-        return;
-    }
     btnFC.textContent = 'Show Less';
-    wrapper.innerHTML = '';
-
     // Zum speichern der Werte
     const foreCastObj = {};
 
@@ -121,11 +182,13 @@ const fetchForecast = (lon, lat) => {
                 foreCastObj.tempAvg = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
 
                 // Create and insert HTML Template
-                wrapper.innerHTML += createHTML(foreCastObj);
-
+                const html = createHTML(foreCastObj);
+                wrapper.insertAdjacentHTML('beforeend',html);
                 document.body.querySelector('.container-fc').scrollIntoView({behavior: 'smooth'});
             })
         })
+        .then(() => sectionForecast.classList.remove('hidden'))
+        .then(() => slider());
 }
 
 const fetchGeo = (city, limit) => {
@@ -133,11 +196,8 @@ const fetchGeo = (city, limit) => {
         .then(response => response.json())
         .then(json => {
             fetchWeather(json[0].lon, json[0].lat);
-            wrapper.innerHTML = '';
-            btnFC.classList.remove('hidden');
-            btnFC.addEventListener('click', e => {
-                fetchForecast(json[0].lon, json[0].lat);
-            })
+            wrapper.innerHTML = resetWrapper;
+            fetchForecast(json[0].lon, json[0].lat);
         })
 }
 

@@ -6,6 +6,7 @@ moment.locale('de');
 const key = '6b2723a1c78fa552dac0f78569b46380';
 const aHome = document.querySelector('.a-home');
 const header = document.querySelector('header');
+const nav = document.querySelector('header nav');
 const main = document.querySelector('main');
 const btn = document.querySelector('#btn');
 const inputCity = document.querySelector('#city');
@@ -23,32 +24,33 @@ let tempMin = document.querySelector('#tempMin_output');
 let tempMax = document.querySelector('#tempMax_output');
 
 // Template for Forecast
-const createHTML = (date,srcIconFC,weather,tempAvg, tempMin, tempMax) => {
+const createHTML = (obj) => {
     return `<div class="container-fc">
-    <h4>${date}</h4>
-    <img src="${srcIconFC}" alt="icon">
+    <h4>${obj.headline}</h4>
+    <img src="${obj.srcIcon}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
             <span>Durchschnittliches Wetter</span>
-            <span>${weather}</span>
+            <span>${obj.weather}</span>
         </div>
         <div class="flex-fc">
             <span>Durchschnittstemperatur</span>
-            <span>${tempAvg}</span>
+            <span>${obj.tempAvg}</span>
         </div>
         <div class="flex-fc">
             <span>Mindest-Temperatur</span>
-            <span>${tempMin}</span>
+            <span>${obj.tempMin}</span>
         </div>
         <div class="flex-fc">
             <span>Maximal-Temperatur</span>
-            <span>${tempMax}</span>
+            <span>${obj.tempMax}</span>
         </div>
     </div>
 </div>`
 }
 
 const fetchWeather = (lon, lat) => {
+    sectionCurrent.classList.remove('hidden');
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
     .then(response => response.json())
     .then(json => { 
@@ -68,16 +70,18 @@ const fetchForecast = (lon, lat) => {
     if(wrapper.childNodes.length !== 0) {
         wrapper.innerHTML = '';
         wrapper.classList.add.hidden;
-        btn.textContent = 'Show More';
+        btnFC.textContent = 'Show More';
         return;
     }
-    btn.textContent = 'Show Less';
+    btnFC.textContent = 'Show Less';
     wrapper.innerHTML = '';
+
+    // Zum speichern der Werte
+    const foreCastObj = {};
 
     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
         .then(response => response.json())
         .then(json => {
-            console.log(json);
 
             // create variables for better readability and scoping
             let array = [[],[],[],[],[]];
@@ -98,29 +102,26 @@ const fetchForecast = (lon, lat) => {
                 else if (compare < day5) array[3].push(el);
                 else if (compare < day6) array[4].push(el);
             })
-            array.forEach((outer, index) => {
+            array.forEach((outer) => {
                 
                 // declare variables --> scoping
                 const temps = [];
-                let headlineFC;
-                let weatherFC;
-                console.log(outer);
-                let srcIconFC = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
+                foreCastObj.srcIcon = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
 
                 // getting temps per day
                 outer.forEach(inner => {
-                    headlineFC = moment(inner.dt_txt).format('LL');
-                    weatherFC = inner.weather[0].description;
+                    foreCastObj.headline = moment(inner.dt_txt).format('LL');
+                    foreCastObj.weather = inner.weather[0].description;
                     temps.push(inner.main.temp);
                 })
 
                 // Calculating temps
-                const tempMin = `${Math.round(Math.min(...temps))} °C`;
-                const tempMax = `${Math.round(Math.max(...temps))} °C`;
-                const tempAvg = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
+                foreCastObj.tempMin = `${Math.round(Math.min(...temps))} °C`;
+                foreCastObj.tempMax = `${Math.round(Math.max(...temps))} °C`;
+                foreCastObj.tempAvg = `${Math.round(temps.reduce((a,b) => a + b) / temps.length)} °C`;
 
                 // Create and insert HTML Template
-                wrapper.innerHTML += createHTML(headlineFC,srcIconFC ,weatherFC,tempAvg,tempMin,tempMax);
+                wrapper.innerHTML += createHTML(foreCastObj);
 
                 document.body.querySelector('.container-fc').scrollIntoView({behavior: 'smooth'});
             })
@@ -132,7 +133,6 @@ const fetchGeo = (city, limit) => {
         .then(response => response.json())
         .then(json => {
             fetchWeather(json[0].lon, json[0].lat);
-            sectionCurrent.classList.remove('hidden');
             wrapper.innerHTML = '';
             btnFC.classList.remove('hidden');
             btnFC.addEventListener('click', e => {
@@ -141,17 +141,9 @@ const fetchGeo = (city, limit) => {
         })
 }
 
-// API World Map
-// doesn't work. google api what u doin
 
-// const mapLayer = 'temp_new';
-// const mapZ = 0;
-// const mapX = 0;
-// const mapY = 0;
-
-// fetch(`https://tile.openweathermap.org/map/${mapLayer}/${mapZ}/${mapX}/${mapY}.png?appid=${key}`).then(response => console.log(response));
-
-// EVENT Listener
+// =================================================
+//                 EVENT Listener
 
 btn.addEventListener('click', x => {
     let city = inputCity.value;
@@ -163,3 +155,25 @@ aHome.addEventListener('click', e => {
     e.preventDefault();
     header.scrollIntoView({behavior: "smooth"});
 })
+
+// ================================================
+//                  Sticky Navbar
+
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = (entries) => {
+    const [entry] = entries;
+    if(!entry.isIntersecting) {
+        nav.classList.add('sticky');
+    } else {
+        nav.classList.remove('sticky');
+    }
+}
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`
+})
+
+headerObserver.observe(header);

@@ -16,14 +16,21 @@ const calToCel = (temp) => {
     return Math.round(temp - 273.15);
 }
 
+document.body.style.fontFamily = "Helvetica";
+
 const fetchWeather = (lon, lat) => {
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`).then(response => response.json()).then(json => {
-        document.body.style.fontFamily = "Helvetica";
+
         console.log(json);
         console.log(json.weather[0].main);
         todaysWeather.innerHTML = "Today's Weather ☀️"
         today.innerHTML = "Today we have: " + json.weather[0].main;
-        temp.innerHTML = "Temperature: " + calToCel(json.main.temp) + " °C";
+        //if (json.weather[0].main >= 20) {
+        //     document.body.style.add("sun");
+        // } else {
+        //     document.body.style.add("");
+        // };
+        temp.innerHTML = calToCel(json.main.temp) + " °C";
         feelsLike.innerHTML = "Feels like: " + calToCel(json.main.feels_like) + " °C";
         tempMin.innerHTML = "Min. temperature will be: " + calToCel(json.main.temp_min) + " °C";
         tempMax.innerHTML = "Max. temperature will be: " + calToCel(json.main.temp_max) + " °C";

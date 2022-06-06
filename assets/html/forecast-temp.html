@@ -1,22 +1,22 @@
 <div class="container-fc">
-    <h4>${date}</h4>
-    <img src="" alt="icon">
+    <h4>${obj.headline}</h4>
+    <img src="${obj.srcIcon}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
             <span>Durchschnittliches Wetter</span>
-            <span>${weather}</span>
+            <span>${obj.weather}</span>
         </div>
         <div class="flex-fc">
             <span>Durchschnittstemperatur</span>
-            <span>${tempAvg}</span>
+            <span>${obj.tempAvg}</span>
         </div>
         <div class="flex-fc">
             <span>Mindest-Temperatur</span>
-            <span>${tempMin}</span>
+            <span>${obj.tempMin}</span>
         </div>
         <div class="flex-fc">
             <span>Maximal-Temperatur</span>
-            <span>${tempMax}</span>
+            <span>${obj.tempMax}</span>
         </div>
     </div>
 </div>

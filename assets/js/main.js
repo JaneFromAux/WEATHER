@@ -1,5 +1,5 @@
 'use strict';
-// language for js lib
+// Spracheinstellung für Moment.JS . Lib für die SplitDates Funktion, da js-vanilla dates pain in the ass sind
 moment.locale('de');
 
 // HTML ELEMENTS
@@ -32,42 +32,40 @@ let humidity = document.querySelector('#humidity_output');
 let wind = document.querySelector('#wind_output');
 let span = document.querySelector('.current__weather__city');
 
+// =======================TEMPLATES=========================
 
-// Template Wrapper
-
-const resetWrapper = `<button class="slider__button slider__button--left">&larr;</button>
+const resetWrapper = `< button class="slider__button slider__button--left" >& larr;</button >
 <button class="slider__button slider__button--right">&rarr;</button>
 <div class="dots"></div>`;
 
-// Template for Forecast
-const createHTML = (obj) => {
-    return `<div class="container-fc">
-    <h4>${obj.headline}</h4>
 
+const createHTML = (obj) => {
+    return `< div class="container-fc" >
+    <h4>${obj.headline}</h4>
+    <img src="${obj.srcIcon}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
-        <img src="${obj.srcIcon}" alt="icon">
             <span>Durchschnittliches Wetter</span>
             <span>${obj.weather}</span>
         </div>
         <div class="flex-fc">
-        <img src="${obj.srcIcon2}" alt="icon2">
             <span>Durchschnittstemperatur</span>
             <span>${obj.tempAvg}</span>
         </div>
         <div class="flex-fc">
-        <img src="${obj.srcIcon3}" alt="icon3">
             <span>Mindest-Temperatur</span>
             <span>${obj.tempMin}</span>
         </div>
         <div class="flex-fc">
-        <img src="${obj.srcIcon4}" alt="icon4">
-            <span>Maximal-Temperatur</span>
-            <span>${obj.tempMax}</span>
-        </div>
+        <span>Maximal-Temperatur</span>
+        <span>${obj.tempMax}</span>
     </div>
-</div>`
+    </div >
+</div > `
 }
+
+
+// =========================SLIDER=============================
 
 const slider = () => {
     const slides = document.querySelectorAll('.container-fc');
@@ -81,7 +79,7 @@ const slider = () => {
     const createDots = () => {
         slides.forEach((_, i) => {
             dotContainer.insertAdjacentHTML('beforeend',
-                `<button class='dots__dot' data-slide='${i}'></button>`)
+                `< button class='dots__dot' data - slide='${i}' ></button > `)
         })
     }
 
@@ -89,7 +87,7 @@ const slider = () => {
         document.querySelectorAll('.dots__dot').forEach(dot => {
             dot.classList.remove('dots__dot--active')
         });
-        document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
+        document.querySelector(`.dots__dot[data - slide="${slide}"]`).classList.add('dots__dot--active');
     }
 
     const goToSlide = slide => {
@@ -128,9 +126,35 @@ const slider = () => {
             activateDot(slide);
         }
     })
-
 }
 
+// =======FUNCTIONS======
+// Aufteilen der Objects nach Datum nach/in Forecast-Fetch/Function
+
+const splitDates = (json) => {
+    // Variablen zum speichern der objects und für bessere Lesbarkeit
+    let array = [[], [], [], [], []];
+    let muster = json.list[0].dt_txt.slice(0, json.list[0].dt_txt.indexOf(' '));
+    let date = moment(muster);
+    let day2 = date.clone().add(1, 'days');
+    let day3 = date.clone().add(2, 'days');
+    let day4 = date.clone().add(3, 'days');
+    let day5 = date.clone().add(4, 'days');
+    let day6 = date.clone().add(5, 'days');
+
+    // Aufteilen der Objects nach Datum, pro Tag ein nested Array mit objects
+    json.list.forEach(el => {
+        let compare = moment(el.dt_txt);
+        if (compare < day2) array[0].push(el);
+        else if (compare < day3) array[1].push(el);
+        else if (compare < day4) array[2].push(el);
+        else if (compare < day5) array[3].push(el);
+        else if (compare < day6) array[4].push(el);
+    })
+    return array;
+}
+
+// =======================CURRENT WEATHER=====================
 
 const fetchWeather = (lon, lat) => {
     sectionCurrent.classList.remove('hidden');
@@ -171,75 +195,68 @@ const fetchWeather = (lon, lat) => {
         });
 }
 
+// ==========================FORECAST=======================
+
 const fetchForecast = (lon, lat) => {
+    // Reset Slider
+    wrapper.innerHTML = resetWrapper;
 
-    // Zum speichern der Werte
-    const foreCastObj = {};
-
+    // Forecast-Fetch und Ausgabe der Werte ins HTML
     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=de`)
         .then(response => response.json())
         .then(json => {
+            const foreCastObj = {};
+            const array = splitDates(json);
 
-            // create variables for better readability and scoping
-            let array = [[], [], [], [], []];
-            let muster = json.list[0].dt_txt.slice(0, json.list[0].dt_txt.indexOf(' '));
-            let date = moment(muster);
-            let day2 = date.clone().add(1, 'days');
-            let day3 = date.clone().add(2, 'days');
-            let day4 = date.clone().add(3, 'days');
-            let day5 = date.clone().add(4, 'days');
-            let day6 = date.clone().add(5, 'days');
-
-            // Aufteilen der Objects nach Datum, pro Tag ein Array mit objects
-            json.list.forEach(el => {
-                let compare = moment(el.dt_txt);
-                if (compare < day2) array[0].push(el);
-                else if (compare < day3) array[1].push(el);
-                else if (compare < day4) array[2].push(el);
-                else if (compare < day5) array[3].push(el);
-                else if (compare < day6) array[4].push(el);
-            })
+            // Loop wobei outer = Immer 1 Tag im Forecast
             array.forEach((outer) => {
 
-                // declare variables --> scoping
-                const temps = [];
-                foreCastObj.srcIcon = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
-                foreCastObj.srcIcon2 = `https://img.icons8.com/external-wanicon-flat-wanicon/344/external-temperature-climate-change-wanicon-flat-wanicon.png`;
-                foreCastObj.srcIcon3 = `https://img.icons8.com/color/344/cold.png`;
-                foreCastObj.srcIcon4 = `https://img.icons8.com/color/344/hot.png`;
 
-                // getting temps per day
+                // Festlegen der Werte für den ganzen Tag
+                // index [Math.round(outer.length / 2)], um einen Wert zur Mitte des Tages zu kriegen.
+                foreCastObj.srcIcon = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
+                foreCastObj.headline = moment(outer[0].dt_txt).format('LL');
+                foreCastObj.weather = outer[Math.round(outer.length / 2)].weather[0].description;
+
+                // Variable temps wegen scoping
+                const temps = [];
+
+                // Sammeln der einzelnen Werte pro Temperatur pro Tag
                 outer.forEach(inner => {
-                    foreCastObj.headline = moment(inner.dt_txt).format('LL');
-                    foreCastObj.weather = inner.weather[0].description;
                     temps.push(inner.main.temp);
                 })
 
-                // Calculating temps
+                // Berechnung Temperaturwerte
                 foreCastObj.tempMin = `${Math.round(Math.min(...temps))} °C`;
                 foreCastObj.tempMax = `${Math.round(Math.max(...temps))} °C`;
                 foreCastObj.tempAvg = `${Math.round(temps.reduce((a, b) => a + b) / temps.length)} °C`;
 
-                // Create and insert HTML Template
+                // Erstellen und Hinzufügen der einzelnen Slides
                 const html = createHTML(foreCastObj);
                 wrapper.insertAdjacentHTML('beforeend', html);
-                document.body.querySelector('.container-fc').scrollIntoView({ behavior: 'smooth' });
             })
         })
         .then(() => sectionForecast.classList.remove('hidden'))
         .then(() => slider());
 }
 
+
+// ============GEODATEN und Start der ganzen Funktionslogik!======
 const fetchGeo = (city, limit) => {
     fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=${key}`)
         .then(response => response.json())
         .then(json => {
-            fetchWeather(json[0].lon, json[0].lat);
-            wrapper.innerHTML = resetWrapper;
-            fetchForecast(json[0].lon, json[0].lat);
+            const geoObj = {
+                lat: json[0].lat,
+                lon: json[0].lon
+            }
+            return geoObj;
+        })
+        .then(geoObj => {
+            fetchWeather(geoObj.lon, geoObj.lat);
+            fetchForecast(geoObj.lon, geoObj.lat);
         })
 }
-
 
 // =================================================
 //                 EVENT Listener

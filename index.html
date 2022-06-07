@@ -5,54 +5,69 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE WEATHER MATTERs</title>
+    <title>THE WEATHER MATTERs 🌦</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
     <header>
         <nav>
-            <a href="#" class="a-home"><h1>Ihre Wettervorhersage</h1></a>
+            <a href="#" class="a-home">
+                <img src="https://img.icons8.com/cute-clipart/344/apple-weather.png" alt="Logo" id="logo">
+            </a>
         </nav>
         <article>
             <h2>Hier wird nur über das Wetter geredet</h2>
             <form action="">
                 <label for="">Das Wetter in Ihrer Stadt</label>
                 <input type="text" name="" id="city" placeholder="Bitte Stadt eingeben" required>
-                <input type="button" value="senden" id="btn">
+                <input type="button" value="Senden" id="btn">
         </article>
         </form>
     </header>
     <main>
         <section class="current__weather hidden">
             <h3>Das aktuelle Wetter in <span class="current__weather__city"></span></h3>
-            <img src="" alt="" class="current__weather__icon" id="">
-                <div class="current__weather__grid">
-                    <div class="current__weather__flex">
-                        <span>Aktuelles Wetter</span>
-                        <span id="today_output"></span>
-                    </div>
-                    <div class="current__weather__flex">
-                        <span>Temperatur</span>
-                        <span id="temp_output"></span>
-                    </div>
-                    <div class="current__weather__flex">
-                        <span>Gefühlte Temperatur</span>
-                        <span id="feelsLike_output"></span>
-                    </div>
-                    <div class="current__weather__flex">
-                        <span>Geringste Temperatur</span>
-                        <span id="tempMin_output"></span>
-                    </div>
-                    <div class="current__weather__flex">
-                        <span>Höchste Temperatur</span>
-                        <span id="tempMax_output"></span>
-                    </div>
+            <div class="current__weather__grid">
+                <div class="current__weather__flex">
+                    <img src="" alt="aktuelles Wetter" class="current__weather__icon" id="">
+                    <span>Aktuelles Wetter</span>
+                    <span id="today_output"></span>
                 </div>
-                <button class="show-fc hidden">Show More</button>
+                <div class="current__weather__flex">
+                    <img src="Temperatur" alt="" class="current__weather__icon2" id="">
+                    <span>Durchschnittstemperatur</span>
+                    <span id="temp_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <img src="" alt="Gefühlte Temperatur" class="current__weather__icon3" id="">
+                    <span>Gefühlte Temperatur</span>
+                    <span id="feelsLike_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <img src="" alt="Geringste Temperatur" class="current__weather__icon4" id="">
+                    <span>Geringste Temperatur</span>
+                    <span id="tempMin_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <img src="" alt="Höchste Temperatur" class="current__weather__icon5" id="">
+                    <span>Höchste Temperatur</span>
+                    <span id="tempMax_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <img src="" alt="Humidity" class="current__weather__icon6" id="">
+                    <span>Luftfeuchtigkeit</span>
+                    <span id="humidity_output"></span>
+                </div>
+                <div class="current__weather__flex">
+                    <img src="" alt="Wind" class="current__weather__icon7" id="">
+                    <span>Windgeschwindigkeit</span>
+                    <span id="wind_output"></span>
+                </div>
+            </div>
         </section>
         <section class="forecast hidden">
-            <h3 class="forecast__headline">So siehts die nächsten Tage aus</h3>
+            <h3 class="forecast__headline">So sieht's die nächsten Tage aus</h3>
             <div class="wrapper">
                 <button class="slider__button slider__button--left">&larr;</button>
                 <button class="slider__button slider__button--right">&rarr;</button>

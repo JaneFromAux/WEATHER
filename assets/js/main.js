@@ -42,7 +42,6 @@ const resetWrapper = `<button class="slider__button slider__button--left">&larr;
 const createHTML = (obj) => {
     return `<div class="container-fc">
     <h4>${obj.headline}</h4>
-    <img src="${obj.srcIcon}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
         <img src="${obj.srcIcon}" alt="icon">
@@ -219,6 +218,9 @@ const fetchForecast = (lon, lat) => {
                 // Festlegen der Werte für den ganzen Tag
                 // index [Math.round(outer.length / 2)], um einen Wert zur Mitte des Tages zu kriegen.
                 foreCastObj.srcIcon = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
+                foreCastObj.srcIcon2 = `https://img.icons8.com/external-wanicon-flat-wanicon/344/external-temperature-climate-change-wanicon-flat-wanicon.png`;
+                foreCastObj.srcIcon3 = `https://img.icons8.com/color/344/cold.png`;
+                foreCastObj.srcIcon4 = `https://img.icons8.com/color/344/hot.png`;
                 foreCastObj.headline = moment(outer[0].dt_txt).format('LL');
                 foreCastObj.weather = outer[Math.round(outer.length / 2)].weather[0].description;
 

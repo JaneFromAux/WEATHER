@@ -1,23 +1,296 @@
-/* sun {
-    background-image: url("https://images.unsplash.com/photo-1525490829609-d166ddb58678?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80");
-} */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
 
 body {
-    background-image: url("https://images.unsplash.com/photo-1525490829609-d166ddb58678?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80");
+    /* font-size rausnehmen bevor man font sizes final anpasst */
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
 }
+
+/*
+=============================================================================
+                            Header
+=============================================================================
+*/
 
 header {
-    border: 1px solid #000;
-    border-radius: 5%;
-    padding: 10vh 5%;
-    margin: 10vh 30%;
-    width: 30%;
-    background: #fff;
+    background: url("https://images.unsplash.com/photo-1525490829609-d166ddb58678?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80") center / cover no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#temp_output {
-    color: lightgrey;
-    font-size: 4em;
+.sticky {
+    position: fixed;
+}
+
+header nav {
+    width: 100%;
+    text-align: left;
+}
+
+header nav a {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    padding: 1rem;
+}
+
+header article {
+    padding-bottom: 15rem;
+    flex: 1;
+    display: grid;
+    row-gap: 3rem;
+    align-content: center;
+    justify-items: center;
+}
+
+#btn {
+    cursor: pointer;
+}
+
+#logo {
+    width: 15%;
+}
+
+/*
+=============================================================================
+                            SECTION Current Weather
+=============================================================================
+*/
+
+.current__weather {
+    color: #fff;
+    margin: 5vh 5% 10vh 5%;
+    padding: 10vh 5%;
+    /* background: rgba(128, 128, 128, 0.5); */
+    background: rgb(0, 212, 255);
+    background: linear-gradient(214deg, rgba(0, 212, 255, 1) 0%, rgba(25, 21, 88, 1) 78%, rgba(2, 0, 36, 1) 100%);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+}
+
+.current__weather h3 {
+    border-bottom: 1px solid #fff;
+
+}
+
+.current__weather__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* border-top: 1px solid #fff; */
+    background: rgba(128, 128, 128, 0.2);
+    margin-top: 2vh;
+    padding: 2vh 5%;
+}
+
+.current__weather__flex {
+    margin: 5vh 0 0;
+    display: flex;
+    flex-direction: column;
+    /* background: yellow; */
+    width: 100%;
+    gap: 15%;
+}
+
+.current__weather__flex img {
+    width: 15%;
+    /* margin-left: auto;
+    margin-right: auto; */
+    margin-left: 15%;
+}
+
+.current__weather__flex:nth-of-type(6) {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+/*
+=============================================================================
+                            SECTION FORECAST
+=============================================================================
+*/
+
+.forecast {
+    /*  */
+}
+
+.forecast__headline {
+    text-align: center;
+    font-size: 4rem;
+    margin-bottom: 3rem;
+}
+
+/* .show-fc {
+    display:inline-block;
+    border: none;
+    background-color: #4c6ef5;
+    color: #fff;
+    padding: 1rem 4rem;
+    border-radius: 20px;
+    margin: 1rem 0;
+    font-size: 3rem;
+}
+
+.show-fc:hover {
+    background-color: #3b5bdb;
+    cursor: pointer;
+} */
+
+/* Slider Styles */
+/* Slide Container */
+.wrapper {
+    position: relative;
+    max-width: 90%;
+    height: 50rem;
+    margin: 0 auto;
+    margin-bottom: 5vh;
+    overflow-x: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+}
+
+
+/* Slider-Buttons */
+
+.slider__button {
     position: absolute;
-    margin: -10vh 20%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 5rem;
+    height: 5rem;
+    border: none;
+    border-radius: 50%;
+    font-size: 2rem;
+    background-color: #3b5bdb;
+    color: #fff;
+}
+
+.slider__button--left {
+    left: 1%;
+}
+
+.slider__button--right {
+    right: 1%;
+}
+
+.slider__button:hover {
+    background-color: #536edc;
+    cursor: pointer;
+}
+
+/* SLIDES */
+.container-fc {
+    color: #fff;
+    padding: 5rem 2rem;
+    border-radius: 50px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50rem;
+    transition: transform 700ms;
+    /* background: red; */
+    /* background: rgba(128, 128, 128, 0.5); */
+    background: rgb(0, 212, 255);
+    background: linear-gradient(214deg, rgba(0, 212, 255, 1) 0%, rgba(25, 21, 88, 1) 78%, rgba(2, 0, 36, 1) 100%);
+}
+
+.container-fc h4 {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.container-fc img {
+    margin-left: 5rem;
+}
+
+.grid-fc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 10rem;
+    /* background: blue; */
+    /* background: rgba(128, 128, 128, 0.8); */
+}
+
+.flex-fc {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    padding: 5vh 5%;
+    align-items: center;
+    border-radius: 5%;
+    background: rgba(128, 128, 128, 0.2);
+    margin: -7vh 10%;
+}
+
+.flex-fc img {
+    margin-left: 4%;
+    width: 30%;
+}
+
+.flex-fc span:nth-of-type(1) {
+    font-size: 1.5rem;
+}
+
+.flex-fc span:nth-of-type(2) {
+    font-size: 4rem;
+}
+
+.flex-fc:nth-of-type(1) span:nth-of-type(2) {
+    font-size: 3rem;
+}
+
+
+/* DOTS */
+
+.dots {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    z-index: 10;
+}
+
+.dots__dot {
+    border: none;
+    background-color: #868e96;
+    opacity: 0.7;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    margin-right: 1.75rem;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.dots__dot:last-child {
+    margin-right: 0;
+}
+
+.dots__dot--active {
+    background-color: #fff;
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+/*
+=============================================================================
+                            Utility Class
+=============================================================================
+*/
+
+.hidden {
+    display: none;
 }

@@ -34,34 +34,37 @@ let span = document.querySelector('.current__weather__city');
 
 // =======================TEMPLATES=========================
 
-const resetWrapper = `< button class="slider__button slider__button--left" >& larr;</button >
+const resetWrapper = `<button class="slider__button slider__button--left">&larr;</button>
 <button class="slider__button slider__button--right">&rarr;</button>
 <div class="dots"></div>`;
 
 
 const createHTML = (obj) => {
-    return `< div class="container-fc" >
+    return `<div class="container-fc">
     <h4>${obj.headline}</h4>
-    <img src="${obj.srcIcon}" alt="icon">
     <div class="grid-fc">
         <div class="flex-fc">
+        <img src="${obj.srcIcon}" alt="icon">
             <span>Durchschnittliches Wetter</span>
             <span>${obj.weather}</span>
         </div>
         <div class="flex-fc">
+        <img src="${obj.srcIcon2}" alt="icon2">
             <span>Durchschnittstemperatur</span>
             <span>${obj.tempAvg}</span>
         </div>
         <div class="flex-fc">
+        <img src="${obj.srcIcon3}" alt="icon3">
             <span>Mindest-Temperatur</span>
             <span>${obj.tempMin}</span>
         </div>
         <div class="flex-fc">
-        <span>Maximal-Temperatur</span>
-        <span>${obj.tempMax}</span>
+        <img src="${obj.srcIcon4}" alt="icon4">
+            <span>Maximal-Temperatur</span>
+            <span>${obj.tempMax}</span>
+        </div>
     </div>
-    </div >
-</div > `
+</div> `
 }
 
 
@@ -79,7 +82,7 @@ const slider = () => {
     const createDots = () => {
         slides.forEach((_, i) => {
             dotContainer.insertAdjacentHTML('beforeend',
-                `< button class='dots__dot' data - slide='${i}' ></button > `)
+                `<button class='dots__dot' data-slide='${i}'></button>`)
         })
     }
 
@@ -87,7 +90,7 @@ const slider = () => {
         document.querySelectorAll('.dots__dot').forEach(dot => {
             dot.classList.remove('dots__dot--active')
         });
-        document.querySelector(`.dots__dot[data - slide="${slide}"]`).classList.add('dots__dot--active');
+        document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
     }
 
     const goToSlide = slide => {
@@ -215,6 +218,9 @@ const fetchForecast = (lon, lat) => {
                 // Festlegen der Werte für den ganzen Tag
                 // index [Math.round(outer.length / 2)], um einen Wert zur Mitte des Tages zu kriegen.
                 foreCastObj.srcIcon = `http://openweathermap.org/img/wn/${outer[Math.round(outer.length / 2)].weather[0].icon}@2x.png`;
+                foreCastObj.srcIcon2 = `https://img.icons8.com/external-wanicon-flat-wanicon/344/external-temperature-climate-change-wanicon-flat-wanicon.png`;
+                foreCastObj.srcIcon3 = `https://img.icons8.com/color/344/cold.png`;
+                foreCastObj.srcIcon4 = `https://img.icons8.com/color/344/hot.png`;
                 foreCastObj.headline = moment(outer[0].dt_txt).format('LL');
                 foreCastObj.weather = outer[Math.round(outer.length / 2)].weather[0].description;
 
